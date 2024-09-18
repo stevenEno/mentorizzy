@@ -9,7 +9,7 @@ class BubblesController < ApplicationController
       @bubbles = @tag.bubbles
       @most_active_bubbles = @tag.bubbles.left_joins(:comments, :boosts).group(:id).order(Arel.sql("COUNT(comments.id) + COUNT(boosts.id) DESC")).limit(10)
     else
-      @bubbles = Bubble.all.order(created_at: :desc)
+      @bubbles = @project.bubbles.order(created_at: :desc)
       @most_active_bubbles = @project.bubbles.left_joins(:comments, :boosts).group(:id).order(Arel.sql("COUNT(comments.id) + COUNT(boosts.id) DESC")).limit(10)
     end
   end
