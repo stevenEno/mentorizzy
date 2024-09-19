@@ -1,0 +1,32 @@
+.projects{
+  --gap: clamp(var(--inline-space), 2cqi, calc(var(--inline-space) * 3));
+  --hover-size: 0;
+  --column-gap: var(--gap);
+  --row-gap: var(--gap);
+
+  list-style: none;
+  padding: var(--gap);
+}
+
+.project__windshield {
+  --border-radius: 1.5em;
+  --bubble-size: 4cqi;
+
+  aspect-ratio: 16 / 9;
+  box-shadow: inset 0 0.25em 1em 0 rgb(0 0 0 / 20%);
+  inline-size: 30ch;
+  max-inline-size: 100%;
+  padding: var(--gap);
+
+  > * {
+    flex-shrink: 1;
+  }
+}
+
+.windshield__link {
+  content: "";
+  inset: 0;
+  overflow: hidden;
+  padding-block-start: 100%;
+  position: absolute;
+}

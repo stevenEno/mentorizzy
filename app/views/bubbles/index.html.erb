@@ -27,7 +27,7 @@
   </nav>
 <% end %>
 
-<section class="windshield flex-inline flex-wrap gap-half justify-center align-end">
+<section class="windshield flex-inline flex-wrap gap-half justify-center align-end" style="view-transition-name: windshield_<%= @project.id %>">
   <% cache([@most_active_bubbles, 'stable_shuffle']) do %>
     <%= render @most_active_bubbles.sort_by { |bubble| Digest::MD5.hexdigest("#{bubble.id}#{@most_active_bubbles.cache_key}") } %>
   <% end %>
