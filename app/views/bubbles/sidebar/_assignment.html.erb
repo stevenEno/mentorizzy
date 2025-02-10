@@ -8,7 +8,7 @@
     <strong>Assign this to…</strong>
 
     <%= form_with url: bucket_bubble_assignment_toggles_path(bubble.bucket, bubble), class: "flex flex-column gap-half full-width", data: { controller: "form" } do |form| %>
-      <% users.each do |user| %>
+      <% users.sort_by(&:name).each do |user| %>
         <div class="btn full-width borderless justify-start overflow-ellipsis" style="--btn-border-radius: 0.3em;">
           <%= form.check_box "assignee_id[]", { 
             checked: bubble.assigned_to?(user),

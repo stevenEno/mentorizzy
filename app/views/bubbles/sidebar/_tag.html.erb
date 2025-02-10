@@ -18,7 +18,7 @@
     <hr class="separator--horizontal full-width">
 
     <%= form_with url: bucket_bubble_tagging_toggles_path(bubble.bucket, bubble), class: "flex flex-column gap-half full-width", data: { controller: "form" } do |form| %>
-      <% tags.each do |tag| %>
+      <% tags.sort_by(&:hashtag).each do |tag| %>
         <div class="btn full-width borderless justify-start overflow-ellipsis" style="--btn-border-radius: 0.3em;">
           <%= form.check_box "tag_id[]", { 
             checked: bubble.tagged_with?(tag),
