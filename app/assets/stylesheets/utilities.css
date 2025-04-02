@@ -203,52 +203,6 @@
     }
   }
 
-  /* Separators */
-  .separator {
-    block-size: 100%;
-    border-block: 0;
-    border-inline-end: 0;
-    border-inline-start: var(--border-size, 1px) var(--border-style, solid) var(--border-color, currentColor);
-    display: inline-flex;
-    inline-size: 0;
-  }
-
-  .separator--horizontal {
-    block-size: 0;
-    border-block-end: 0;
-    border-block-start: var(--border-size, 1px) var(--border-style, solid) var(--border-color, currentColor);
-    border-inline: 0;
-    display: flex;
-  }
-
-  /* Spinners */
-  .spinner {
-    position: relative;
-
-    &::before {
-      --mask: no-repeat radial-gradient(#000 68%, #0000 71%);
-      --dot-size: 1.25em;
-
-      -webkit-mask: var(--mask), var(--mask), var(--mask);
-      -webkit-mask-size: 28% 45%;
-      animation: submitting 1.3s infinite linear;
-      aspect-ratio: 8/5;
-      background: currentColor;
-      content: "";
-      inline-size: var(--dot-size);
-      inset: 50% 0.25em;
-      margin-block: calc((var(--dot-size) / 3) * -1);
-      margin-inline: calc((var(--dot-size) / 2) * -1);
-      position: absolute;
-    }
-  }
-
-  /* QR Codes */
-  .qr-code {
-    aspect-ratio: 1;
-    block-size: 50dvh;
-  }
-
   /* Accessibility */
   .visually-hidden,
   .for-screen-reader {
@@ -263,9 +217,4 @@
   /* Visibility */
   [hidden] { display: none !important; }
   [contents] { display: contents; }
-
-  /* Turbo */
-  turbo-frame {
-    display: contents;
-  }
 }
