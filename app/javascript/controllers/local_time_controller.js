@@ -11,6 +11,7 @@ export default class extends Controller {
     this.shortDateFormatter = new Intl.DateTimeFormat(undefined, { month: "short", day: "numeric" })
     this.dateTimeFormatter = new Intl.DateTimeFormat(undefined, { timeStyle: "short", dateStyle: "short" })
     this.agoFormatter = new AgoFormatter()
+    this.daysAgoFormatter = new DaysAgoFormatter()
     this.indaysFormatter = new InDaysFormatter()
   }
 
@@ -40,6 +41,10 @@ export default class extends Controller {
 
   agoTargetConnected(target) {
     this.#formatTime(this.agoFormatter, target)
+  }
+
+  daysAgoTargetConnected(target) {
+    this.#formatTime(this.daysAgoFormatter, target)
   }
 
   indaysTargetConnected(target) {
@@ -84,6 +89,22 @@ class AgoFormatter {
     quantity = Math.floor(quantity)
     const suffix = (quantity === 1) ? "" : "s"
     return `${quantity} ${word}${suffix} ago`
+  }
+}
+
+class DaysAgoFormatter {
+  format(dt) {
+    const now = new Date()
+
+    const startOfToday = new Date(now.getFullYear(), now.getMonth(), now.getDate())
+    const startOfGivenDay = new Date(dt.getFullYear(), dt.getMonth(), dt.getDate())
+
+    const msPerDay = 1000 * 60 * 60 * 24
+    const dayDiff = Math.floor((startOfToday - startOfGivenDay) / msPerDay)
+
+    if (dayDiff === 0) return "Today"
+    if (dayDiff === 1) return "Yesterday"
+    return `in ${dayDiff} days`
   }
 }
 

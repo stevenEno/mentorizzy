@@ -6,14 +6,9 @@
       <h3 class="card__title">
         <%= bubble.title %>
       </h3>
-      <div class="txt-small overflow-ellipsis txt-uppercase"><%= "Added to #{bubble.bucket.name} by #{bubble.creator.name}" %> <%=
-        days = (Date.current - bubble.created_at.to_date).to_i
-        case days
-          when 0 then "today"
-          when 1 then "yesterday"
-          else "#{days} days ago".html_safe
-        end
-      %></div>
+      <div class="txt-small overflow-ellipsis txt-uppercase"><%= "Added to #{bubble.bucket.name} by #{bubble.creator.name}" %>
+        <%= local_datetime_tag(bubble.created_at, style: :daysAgo) %>
+      </div>
       <div class="card__stuff flex align-center gap">
         <%= render "bubbles/assignees", bubble: bubble %>
         <div class="overflow-ellipsis"><%= render "bubbles/tags", bubble: bubble %></div>

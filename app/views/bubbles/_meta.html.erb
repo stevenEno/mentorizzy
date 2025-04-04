@@ -1,32 +1,18 @@
 <div class="card__meta flex txt-tight-lines txt-uppercase">
   <div class="flex flex-column gap txt-align-end">
-    <span class="pad-inline overflow-ellipsis"><%= bubble.creating? ? "Added" : "Updated" %> 
-      <%= days = (Date.current - bubble.updated_at.to_date).to_i
-          case days
-          when 0 then "<strong>Today</strong>".html_safe
-          when 1 then "<strong>Yesterday</strong>".html_safe
-          else "<strong>#{days}</strong> days ago".html_safe
-          end %>
+    <span class="pad-inline overflow-ellipsis"><%= bubble.creating? ? "Added" : "Updated" %>
+      <%= local_datetime_tag(bubble.updated_at, style: :daysAgo) %>
     </span>
 
     <hr class="full-width separator--horizontal unpad margin-none">
 
     <% if bubble.creating? %>
-      <span class="pad-inline overflow-ellipsis">Expires 
-        <%= days = (bubble.auto_pop_at.to_date - Date.current).to_i
-            case days
-            when 0 then "<strong>Today</strong>".html_safe
-            else "in <strong>#{days}</strong> days".html_safe
-            end %>
+      <span class="pad-inline overflow-ellipsis">Expires
+        <%= local_datetime_tag(bubble.auto_pop_at, style: :daysAgo) %>
       </span>
     <% else %>
-      <span class="pad-inline overflow-ellipsis">Added 
-        <%= days = (Date.current - bubble.created_at.to_date).to_i
-            case days
-            when 0 then "<strong>Today</strong>".html_safe
-            when 1 then "<strong>Yesterday</strong>".html_safe
-            else "<strong>#{days}</strong> days ago".html_safe
-            end %>
+      <span class="pad-inline overflow-ellipsis">Added
+        <%= local_datetime_tag(bubble.created_at, style: :daysAgo) %>
       </span>
     <% end %>
   </div>
@@ -39,7 +25,7 @@
     </span>
 
     <hr class="full-width separator--horizontal unpad margin-none">
-    
+
     <%= render "bubbles/boosts", bubble: bubble %>
   </div>
 </div>
