@@ -8,7 +8,7 @@
       <strong class="overflow-ellipsis notification__title txt-small txt-tight-lines"><%= notification_title(notification) %></strong>
         <div class="overflow-ellipsis txt-small txt-tight-lines">
           <% if notification.event.action == "commented" %>
-            <%= "#{ strip_tags(notification.event.comment.body_html).blank? ? "#{ notification.event.creator.name } replied" : "#{ notification.event.creator.name }:" } #{ strip_tags(notification.event.comment.body_html).truncate(200) }" %>
+            <%= "#{strip_tags(notification.event.comment.body_html).blank? ? "#{notification.event.creator.name} replied" : "#{notification.event.creator.name}:" } #{strip_tags(notification.event.comment.body_html).truncate(200)}" %>
           <% else %>
             <%= notification_body(notification) %>
           <% end %>
