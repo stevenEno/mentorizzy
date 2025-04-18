@@ -31,8 +31,8 @@ class Card < ApplicationRecord
 
   scope :by_engagement_status, ->(status) do
     case status.to_s
-    when "considering"    then considering
-    when "doing"          then doing.with_golden_first
+    when "considering" then considering
+    when "doing"       then doing.with_golden_first
     end
   end
 
