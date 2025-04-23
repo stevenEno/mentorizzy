@@ -4,20 +4,25 @@
     <%= filter_hidden_field_tag key, value %>
   <% end %>
 
-  <%= link_to cards_path(filter.as_params.except(:collection_ids)), class: "btn popup__item" do %>
-    <span class="overflow-ellipsis">All collections</span>
-  <% end %>
-
   <% Current.user.collections.order(:name).each do |collection| %>
-    <div class="btn popup__item">
-      <%= form.check_box "collection_ids[]", {
-            checked: filter.collections.include?(collection),
-            data: { action: "change->form#submit" },
-            include_hidden: false,
-      }, collection.id %>
+    <div class="popup__group flex align-center full-width gap-half">
+      <div class="btn txt-xx-small">
+        <%= form.check_box "collection_ids[]", {
+              checked: filter.collections.include?(collection),
+              data: { action: "change->form#submit" },
+              include_hidden: false,
+        }, collection.id %>
 
-      <%= form.label "collection_ids[]", collection.name, for: dom_id(collection, :filter), class: "overflow-ellipsis" %>
-      <%= icon_tag "check", size: 18, class: "checked flex-item-justify-end" %>
+        <span class="for-screen-reader">
+          Toggle filter for <%= collection.name %>
+        </span>
+        <%= icon_tag "check", size: 18, class: "checked flex-item-justify-end" %>
+      </div>
+
+      <%= link_to cards_path(collection_ids: [ collection ]), class: "btn popup__item flex-item-grow justify-space-between" do %>
+        <span class="overflow-ellipsis flex-item-grow"><%= collection.name %></span>
+        <span class="translucent"> ›</span>
+      <% end %>
     </div>
   <% end %>
 <% end %>

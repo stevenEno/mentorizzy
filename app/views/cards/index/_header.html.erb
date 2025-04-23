@@ -12,8 +12,13 @@
         </h1>
       </button>
 
-      <dialog class="events__popup popup panel flex-column align-start gap-half fill-white shadow" data-dialog-target="dialog" data-action="turbo:before-cache@document->dialog#close">
-        <strong class="popup__title margin-block-start-half pad-inline-half">In Collection</strong>
+      <dialog class="events__popup popup popup--animated panel flex-column align-start gap-half fill-white shadow" data-dialog-target="dialog" data-action="turbo:before-cache@document->dialog#close">
+        <div class="flex align-center full-width gap-half">
+          <span class="btn borderless" style="pointer-events: none; --icon-size: 1.3em; --btn-padding: 0 0.6em 0 0.3em;">
+            <%= icon_tag "filter" %>
+          </span>
+          <strong class="popup__title txt-medium">Collections</strong>
+        </div>
 
         <%= render "cards/index/collections_filter", filter: filter %>
       </dialog>
