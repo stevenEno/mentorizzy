@@ -5,7 +5,7 @@
 <% if card.closed? %>
   <div class="card__closed">
     <span class="card__closed-title txt-uppercase"><%= card.closure.reason %></span>
-    <strong><%= card.closed_at.strftime("%b %d, %Y") %></strong>
-    <span>by <span class="card__closed-by"><%= card.closed_by.name %></span></span>
+    <strong class="txt-uppercase"><%= card.closed_at.strftime("%b %d, %Y") %></strong>
+    <span>by <span class="card__closed-by"><%= familiar_name_for(card.closed_by) %></span></span>
   </div>
 <% end %>
