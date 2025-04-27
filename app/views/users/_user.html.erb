@@ -10,6 +10,7 @@
   <%= form_with model: user, url: user_role_path(user), data: { controller: "form" }, method: :patch do | form | %>
     <label class="btn txt-small flex-item-no-shrink" for="<%= dom_id(user, :role) %>" arial-label="Role: <%= user.admin? ? "Administrator" : "Member" %>">
       <%= icon_tag "crown" %>
+      <span class="for-screen-reader">Role: <%= user.admin? ? "Administrator" : "Member" %></span>
       <%= form.check_box :role, { data: { action: "form#submit" }, disabled: !Current.user.can_administer?(user), hidden: true, id: dom_id(user, :role) }, "admin", "member" %>
     </label>
   <% end %>
