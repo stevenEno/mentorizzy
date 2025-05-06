@@ -29,7 +29,7 @@
       font-family: inherit;
 
       &::placeholder {
-        color: var(--color-white);
+        color: oklch(var(--lch-green-light));
         opacity: 0.5;
       }
     }
@@ -75,6 +75,7 @@
   }
 
   .has-error .terminal__input {
-    border: 2px solid red;
+    outline: 2px solid var(--color-negative);
+    outline-offset: 2px;
   }
 }
