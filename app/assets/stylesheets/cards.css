@@ -121,6 +121,10 @@
     max-inline-size: 100%;
     min-inline-size: 0;
     overflow: hidden;
+
+    .workflow-stage {
+      display: none;
+    }
   }
 
   .card__id {
