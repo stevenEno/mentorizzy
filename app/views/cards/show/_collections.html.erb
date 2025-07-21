@@ -3,7 +3,7 @@
       data: { controller: "form" } do |form| %>
   <% if Current.user.collections.one? %>
     <%= link_to cards_path, class: "popup__group flex align-center", data: { filter_target: "item", navigable_list_target: "item" } do %>
-      <%= tag.div class: "popup__item btn flex-item-grow" do %>
+      <%= tag.div class: "popup__item btn" do %>
         <span class="overflow-ellipsis"><%= Current.user.collections.first.name %></span>
         <span class="txt-ink translucent flex-item-no-shrink flex-item-justify-end"><span class="txt-x-small txt-uppercase">GO TO</span> ›</span>
       <% end %>
@@ -18,7 +18,7 @@
         </span>
         <%= icon_tag "check", size: 18, class: "checked" %>
       </label>
-      <%= tag.div class: "popup__item btn flex-item-grow" do %>
+      <%= tag.div class: "popup__item btn" do %>
         <span class="overflow-ellipsis">All collections</span>
         <span class="txt-ink translucent flex-item-no-shrink flex-item-justify-end"><span class="txt-x-small txt-uppercase">GO TO</span> ›</span>
       <% end %>
@@ -39,7 +39,7 @@
           <%= icon_tag "check", size: 18, class: "checked" %>
         </label>
 
-        <%= link_to cards_path(collection_ids: [ collection ]), class: "popup__item btn flex-item-grow" do %>
+        <%= link_to cards_path(collection_ids: [ collection ]), class: "popup__item btn" do %>
           <span class="overflow-ellipsis"><%= collection.name %></span>
           <span class="translucent flex-item-no-shrink flex-item-justify-end"> ›</span>
         <% end %>

@@ -12,7 +12,7 @@
     <%= icon_tag "check", size: 18, class: "checked flex-item-justify-end" %>
   </label>
 
-  <%= link_to cards_path(collection_ids: [ collection ]), class: "popup__item btn flex-item-grow" do %>
+  <%= link_to cards_path(collection_ids: [ collection ]), class: "popup__item btn" do %>
     <span class="overflow-ellipsis"><%= collection.name %></span>
     <span class="translucent flex-item-no-shrink flex-item-justify-end"> ›</span>
   <% end %>

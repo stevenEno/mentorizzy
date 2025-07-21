@@ -23,7 +23,7 @@
           <% Current.user.collections.alphabetically.each do |collection| %>
             <li class="popup__group flex align-center full-width" data-filter-target="item" data-navigable-list-target="item">
               <%= button_to card_collection_path(card, params: { collection_id: collection.id }), method: :patch,
-                  class: "popup__item btn flex-item-grow full-width unpad-inline",
+                  class: "popup__item btn full-width unpad-inline",
                   form_class: "max-width flex-item-grow" do %>
                 <span class="overflow-ellipsis flex-item-grow"><%= collection.name %></span>
                 <%= icon_tag "check", size: 18, class: "checked flex-item-no-shrink flex-item-justify-end", style: "--icon-size: 1em" if card.collection == collection %>
