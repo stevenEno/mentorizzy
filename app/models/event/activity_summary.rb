@@ -1,8 +1,6 @@
 class Event::ActivitySummary < ApplicationRecord
   validates :key, :contents, presence: true
 
-  store_accessor :data, :event_ids
-
   after_create_commit :broadcast_activity_summarized
 
   class << self
