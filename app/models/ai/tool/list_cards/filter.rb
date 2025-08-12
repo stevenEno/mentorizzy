@@ -1,5 +1,6 @@
-class Ai::Tool::ListCards::Filter
-  FILTERS = {
+class Ai::Tool::ListCards::Filter < Ai::Tool::Filter
+   register_filters(
+    query: :apply_search,
     ids: :apply_ids_filter,
     collection_ids: :apply_collection_ids_filter,
     golden: :apply_golden_filter,
@@ -7,32 +8,19 @@ class Ai::Tool::ListCards::Filter
     created_after: :apply_created_after_filter,
     last_active_before: :apply_last_active_before_filter,
     last_active_after: :apply_last_active_after_filter
-  }.freeze
-
-  attr_reader :scope, :filters
-
-  def initialize(scope:, filters:)
-    @scope = scope
-    @filters = filters
-  end
-
-  def filter
-    FILTERS.reduce(scope) do |filtered_scope, (filter_name, method_name)|
-      if filters[filter_name].present?
-        send(method_name, filtered_scope)
-      else
-        filtered_scope
-      end
-    end
-  end
+  )
 
   private
+    def apply_search(scope)
+      scope.search(params[:query])
+    end
+
     def apply_ids_filter(scope)
-      scope.where(id: filters[:ids])
+      scope.where(id: filters[:ids].split(",").map(&:strip))
     end
 
     def apply_collection_ids_filter(scope)
-      scope.where(collection_id: filters[:collection_ids])
+      scope.where(collection_id: filters[:collection_ids].split(",").map(&:strip))
     end
 
     def apply_golden_filter(scope)
@@ -40,18 +28,18 @@ class Ai::Tool::ListCards::Filter
     end
 
     def apply_created_before_filter(scope)
-      scope.where(created_at: ...filters[:created_before])
+      scope.where(created_at: ...filters[:created_before].to_datetime)
     end
 
     def apply_created_after_filter(scope)
-      scope.where(created_at: filters[:created_after]...)
+      scope.where(created_at: filters[:created_after].to_datetime...)
     end
 
     def apply_last_active_before_filter(scope)
-      scope.where(last_active_at: ...filters[:last_active_before])
+      scope.where(last_active_at: ...filters[:last_active_before].to_datetime)
     end
 
     def apply_last_active_after_filter(scope)
-      scope.where(last_active_at: filters[:last_active_after]...)
+      scope.where(last_active_at: filters[:last_active_after].to_datetime...)
     end
 end

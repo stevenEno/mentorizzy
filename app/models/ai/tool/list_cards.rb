@@ -2,19 +2,6 @@ class Ai::Tool::ListCards < Ai::Tool
   description <<-MD
     Lists all cards accessible by the current user.
     The response is paginated so you may need to iterate through multiple pages to get the full list.
-    A next page exists if the `pagination.next_page` field is present in the response.
-    Responses are JSON objects that look like this:
-    ```
-    {
-      "cards": [
-        { "id": 3 },
-        { "id": 4 }
-      ],
-      "pagination": {
-        "next_page": "e3c2gh75e4..."
-      }
-    }
-    ```
     Each card object has the following fields:
     - id [Integer, not null]
     - title [String, not null] - The title of the card
@@ -34,18 +21,22 @@ class Ai::Tool::ListCards < Ai::Tool
 
   param :page,
     type: :string,
-    desc: "Which page to return. Leave balnk to get the first page",
+    desc: "Which page to return. Leave blank to get the first page",
     required: false
   param :query,
     type: :string,
-    desc: "If provided, will perform a semantinc search by embeddings and return only matching cards",
+    desc: "If provided, will perform a semantic search by embeddings and return only matching cards",
+    required: false
+  param :ordered_by,
+    type: :string,
+    desc: "Can be either id, created_at or last_active_at followed by ASC or DESC - e.g. `created_at DESC`",
     required: false
   param :ids,
     type: :string,
     desc: "If provided, will return only cards with the given IDs (comma-separated)",
     required: false
   param :collection_ids,
-    type: :integer,
+    type: :string,
     desc: "If provided, will return only cards for the specified collections (comma-separated)",
     required: false
   param :golden,
@@ -82,9 +73,16 @@ class Ai::Tool::ListCards < Ai::Tool
       .includes(:stage, :creator, :assignees, :goldness, :collection)
 
     cards = Filter.new(scope: cards, filters: params).filter
-    cards = cards.search(params[:query]) if params[:query].present?
 
-    paginated_response(cards, page: params[:page], ordered_by: { created_at: :asc, id: :desc }) do |card|
+    ordered_by = OrderClause.parse(
+      params[:ordered_by],
+      defaults: { id: :desc },
+      permitted: %w[id created_at last_active_at]
+    )
+
+    # TODO: The serialization here is temporary until we add an API,
+    # then we can re-use the jbuilder views and caching from that
+    paginated_response(cards, page: params[:page], ordered_by: ordered_by.to_h) do |card|
       card_attributes(card)
     end
   end

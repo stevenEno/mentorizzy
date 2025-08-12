@@ -2,18 +2,6 @@ class Ai::Tool::ListUsers < Ai::Tool
   description <<-MD
     Lists all users accessible by the current user.
     The response is paginated so you may need to iterate through multiple pages to get the full list.
-    Responses are JSON objects that look like this:
-    ```
-    {
-      "users": [
-        { "id": 3, "name": "John Doe" },
-        { "id": 4, "name": "Johanna Doe" }
-      ],
-      "pagination": {
-        "next_page": "e3c2gh75e4..."
-      }
-    }
-    ```
     Each user object has the following fields:
     - id [Integer, not null]
     - name [String, not null]
@@ -23,8 +11,12 @@ class Ai::Tool::ListUsers < Ai::Tool
 
   param :page,
     type: :string,
-    desc: "Which page to return. Leave balnk to get the first page",
+    desc: "Which page to return. Leave blank to get the first page",
     required: false
+  param :collection_id,
+    type: :integer,
+    desc: "For which collection to list users",
+    required: true
   param :ids,
     type: :string,
     desc: "If provided, will return only the users with the given IDs (comma-separated)",
@@ -37,27 +29,23 @@ class Ai::Tool::ListUsers < Ai::Tool
   end
 
   def execute(**params)
-    scope = User.all
+    collection = user.collections.find(params[:collection_id])
+    users = Filter.new(scope: collection.users, filters: params).filter
 
-    scope = scope.where(id: params[:ids].split(",").map(&:to_i)) if params[:ids].present?
-
-    page = GearedPagination::Recordset.new(
-      scope,
-      ordered_by: { name: :asc, id: :desc }
-    ).page(params[:page])
-
-    {
-      users: page.records.map do |user|
-        {
-          id: user.id,
-          name: user.name,
-          role: user.role,
-          url: user_url(user)
-        }
-      end,
-      pagination: {
-        next_page: page.next_param
-      }
-    }.to_json
+    # TODO: The serialization here is temporary until we add an API,
+    # then we can re-use the jbuilder views and caching from that
+    paginated_response(users, page: params[:page], ordered_by: { name: :asc, id: :desc }) do |user|
+      user_attributes(user)
+    end
   end
+
+  private
+    def user_attributes(user)
+      {
+        id: user.id,
+        name: user.name,
+        role: user.role,
+        url: user_url(user)
+      }
+    end
 end
