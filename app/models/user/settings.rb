@@ -19,12 +19,16 @@ class User::Settings < ApplicationRecord
     end
   end
 
+  def bundling_emails?
+    !bundle_email_never?
+  end
+
   private
     def review_pending_bundles
-      if bundle_email_never?
-        cancel_pending_bundles
-      else
+      if bundling_emails?
         reschedule_pending_bundles
+      else
+        cancel_pending_bundles
       end
     end
 

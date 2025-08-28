@@ -3,6 +3,7 @@ require "test_helper"
 class Notification::BundleTest < ActiveSupport::TestCase
   setup do
     @user = users(:david)
+    @user.settings.bundle_email_every_few_hours!
   end
 
   test "new notifications are bundled" do
@@ -12,6 +13,14 @@ class Notification::BundleTest < ActiveSupport::TestCase
 
     bundle = @user.notification_bundles.pending.last
     assert_includes bundle.notifications, notification
+  end
+
+  test "don't bundle new notifications if bundling is disabled" do
+    @user.settings.bundle_email_never!
+
+    assert_no_difference -> { @user.notification_bundles.count } do
+      @user.notifications.create!(source: events(:logo_published), creator: @user)
+    end
   end
 
   test "notifications are bundled withing the aggregation period" do

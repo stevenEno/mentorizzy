@@ -43,6 +43,6 @@ class Notification < ApplicationRecord
     end
 
     def bundle
-      user.bundle(self)
+      user.bundle(self) if user.settings.bundling_emails?
     end
 end
