@@ -39,6 +39,9 @@ gem "mission_control-jobs"
 gem "sentry-ruby"
 gem "sentry-rails"
 gem "rails_structured_logging", bc: "rails-structured-logging"
+gem "yabeda"
+gem "prometheus-client-mmap", "~> 1.1"
+gem "yabeda-prometheus-mmap"
 
 # AI
 gem "ruby_llm", git: "https://github.com/crmne/ruby_llm.git"
