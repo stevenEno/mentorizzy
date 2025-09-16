@@ -30,7 +30,7 @@ class WebhooksControllerTest < ActionDispatch::IntegrationTest
         webhook: {
           name: "Test Webhook",
           url: "https://example.com/webhook",
-          subscribed_actions: [ "", "card_created", "card_closed" ]
+          subscribed_actions: [ "", "card_published", "card_closed" ]
         }
       }
     end
@@ -41,7 +41,7 @@ class WebhooksControllerTest < ActionDispatch::IntegrationTest
     assert_equal collection, webhook.collection
     assert_equal "Test Webhook", webhook.name
     assert_equal "https://example.com/webhook", webhook.url
-    assert_equal [ "card_created", "card_closed" ], webhook.subscribed_actions
+    assert_equal [ "card_published", "card_closed" ], webhook.subscribed_actions
   end
 
   test "create with invalid params" do
@@ -70,7 +70,7 @@ class WebhooksControllerTest < ActionDispatch::IntegrationTest
     patch collection_webhook_path(webhook.collection, webhook), params: {
       webhook: {
         name: "Updated Webhook",
-        subscribed_actions: [ "card_created" ]
+        subscribed_actions: [ "card_published" ]
       }
     }
 
@@ -78,7 +78,7 @@ class WebhooksControllerTest < ActionDispatch::IntegrationTest
 
     assert_redirected_to collection_webhook_path(webhook.collection, webhook)
     assert_equal "Updated Webhook", webhook.name
-    assert_equal [ "card_created" ], webhook.subscribed_actions
+    assert_equal [ "card_published" ], webhook.subscribed_actions
   end
 
   test "update with invalid params" do

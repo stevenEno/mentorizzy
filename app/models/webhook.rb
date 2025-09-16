@@ -10,8 +10,9 @@ class Webhook < ApplicationRecord
     card_assigned
     card_closed
     card_collection_changed
-    card_created
-    card_popped
+    card_due_date_added
+    card_due_date_changed
+    card_due_date_removed
     card_published
     card_reopened
     card_staged
