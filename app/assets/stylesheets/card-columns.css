@@ -25,7 +25,7 @@
     --expanded-min: 450px;
 
     display: flex;
-    gap: 0.75em;
+    gap: calc(var(--cards-gap) / 4);
     justify-content: center;
     align-items: stretch;
     position: relative;
@@ -149,7 +149,8 @@
         --btn-padding: 0;
 
         font-weight: 600;
-        margin-block-start: 0;
+        line-height: 1;
+        margin-block-start: 0.5em;
       }
     }
 
@@ -219,6 +220,14 @@
 
       /* Set lower limit for font size */
       font-size: clamp(0.6rem, 0.85cqi, 100px);
+    }
+
+    .card__body {
+      margin-block: var(--block-space-half);
+    }
+
+    .card__footer {
+      margin-block-start: var(--block-space-half);
     }
 
     .card__title {
