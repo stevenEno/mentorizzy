@@ -10,7 +10,7 @@
       font-size: var(--text-x-small);
       font-weight: normal;
       inset: -1ch auto auto 50%;
-      max-inline-size: 28ch;
+      max-inline-size: 50ch;
       opacity: 0;
       padding: 0.25ch 1ch;
       transition: var(--tooltip-duration) ease-out allow-discrete;
