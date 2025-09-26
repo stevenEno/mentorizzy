@@ -54,7 +54,7 @@ module AccessesHelper
       params: { show_watchers: show_watchers, involvement: next_involvement(access.involvement) }
     ) do
       safe_join([
-        icon_tag("notification-bell-#{access.involvement.dasherize}"),
+        icon_tag("notification-bell-#{icon_only ? 'reverse-' : nil}#{access.involvement.dasherize}"),
         tag.span(
           involvement_access_label(collection, access.involvement),
           class: class_names("txt-nowrap txt-uppercase", "for-screen-reader": icon_only),
