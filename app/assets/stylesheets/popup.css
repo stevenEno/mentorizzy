@@ -6,6 +6,7 @@
     --panel-size: auto;
     --popup-icon-size: 24px;
     --popup-item-padding-inline: 0.5rem;
+    --popup-display: flex;
 
     inset: 0 auto auto 50%;
     min-inline-size: min(25ch, calc(100dvw - var(--block-space-double)));
@@ -16,7 +17,7 @@
     z-index: var(--z-popup);
 
     &[open] {
-      display: flex;
+      display: var(--popup-display);
     }
 
     &.orient-left {
@@ -52,11 +53,11 @@
     background: var(--color-canvas);
     font-size: var(--text-small);
     font-weight: bold;
+    inset-block-start: 0;
     list-style: none;
     padding: var(--block-space-half) var(--inline-space-half);
     position: sticky;
     text-transform: uppercase;
-    top: calc(-1 * var(--block-space));
     z-index: 1;
 
     &:is(summary) {
