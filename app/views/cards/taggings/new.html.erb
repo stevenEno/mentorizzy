@@ -5,24 +5,19 @@
     data-navigable-list-actionable-items-value="true"
     data-action="keydown->navigable-list#navigate filter:changed->navigable-list#reset dialog:show@document->navigable-list#reset"
   >
-    <strong class="popup__title">Tag this…</strong>
+    <div class="flex justify-space-between">
+      <strong class="popup__title">Tag this…</strong><kbd class="txt-x-small hide-on-touch">t</kbd>
+    </div>
 
     <%= form_with url: card_taggings_path(@card),
           id: dom_id(@card, :tags_form),
           data: { controller: "form", action: "submit->form#preventEmptySubmit" },
           class: "flex flex-column gap-half full-width margin-block-half" do |form| %>
       <%= form.text_field :tag_title, placeholder: @tags.any? ? "Add a new tag or filter…" : "Name this tag…", class: "input txt-small full-width",
-            autocomplete: "off", data: { filter_target: "input", form_target: "input", action: "input->filter#filter" } %>
+            autocomplete: "off", autofocus: true, data: { filter_target: "input", form_target: "input", action: "input->filter#filter" } %>
     <% end %>
 
     <ul class="popup__list" data-filter-target="list">
-      <li class="popup__item" data-navigable-list-target="item">
-        <%= button_tag "Create a new tag", type: "submit", form: dom_id(@card, :tags_form), class: "btn popup__btn", data: { form_target: "submit" } do %>
-          <%= icon_tag "add" %>
-          <span>Create tag</span>
-        <% end %>
-      </li>
-
       <% @tags.each do |tag| %>
         <li class="popup__item" data-filter-target="item" data-navigable-list-target="item" aria-checked="<%= @card.tagged_with?(tag) %>">
           <%= button_to card_taggings_path(@card, params: { tag_title: tag.title }), method: :post,
@@ -33,6 +28,13 @@
           <% end %>
         </li>
       <% end %>
+
+      <li class="popup__item" data-navigable-list-target="item">
+        <%= button_tag "Create a new tag", type: "submit", form: dom_id(@card, :tags_form), class: "btn popup__btn", data: { form_target: "submit" } do %>
+          <%= icon_tag "add" %>
+          <span>Create tag</span>
+        <% end %>
+      </li>
     </ul>
   </div>
 <% end %>

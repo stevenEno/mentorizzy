@@ -2,7 +2,7 @@
   <div class="position-relative" data-controller="dialog"
         data-action="keydown.esc->dialog#close click@document->dialog#closeOnClickOutside" <%= "hidden" if card.closed? %>>
     <button class="tag-picker__button btn card__hide-on-index" style="--btn-background: var(--card-bg-color);"
-        data-controller="tooltip" data-action="click->dialog#open:stop">
+        data-controller="tooltip hotkey" data-action="click->dialog#open:stop keydown.t@document->hotkey#click">
       <%= icon_tag "tag" %>
       <span class="for-screen-reader">Add a tag</span>
     </button>
