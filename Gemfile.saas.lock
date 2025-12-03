@@ -1,9 +1,9 @@
 GIT
   remote: https://github.com/basecamp/fizzy-saas
-  revision: 6dd8bb616632edfabc3d814f88f0658d96486e17
+  revision: f516ae03f981e080e5b4e55a8a2d8afb28de6f1d
   specs:
     fizzy-saas (0.1.0)
-      prometheus-client-mmap
+      prometheus-client-mmap (~> 1.4.0)
       queenbee
       rails (>= 8.1.0.beta1)
       rails_structured_logging
@@ -367,32 +367,32 @@ GEM
       prettyprint
     prettyprint (0.2.0)
     prism (1.6.0)
-    prometheus-client-mmap (1.3.0)
+    prometheus-client-mmap (1.4.0)
       base64
       bigdecimal
       logger
       rb_sys (~> 0.9.117)
-    prometheus-client-mmap (1.3.0-aarch64-linux-gnu)
+    prometheus-client-mmap (1.4.0-aarch64-linux-gnu)
       base64
       bigdecimal
       logger
       rb_sys (~> 0.9.117)
-    prometheus-client-mmap (1.3.0-aarch64-linux-musl)
+    prometheus-client-mmap (1.4.0-aarch64-linux-musl)
       base64
       bigdecimal
       logger
       rb_sys (~> 0.9.117)
-    prometheus-client-mmap (1.3.0-arm64-darwin)
+    prometheus-client-mmap (1.4.0-arm64-darwin)
       base64
       bigdecimal
       logger
       rb_sys (~> 0.9.117)
-    prometheus-client-mmap (1.3.0-x86_64-linux-gnu)
+    prometheus-client-mmap (1.4.0-x86_64-linux-gnu)
       base64
       bigdecimal
       logger
       rb_sys (~> 0.9.117)
-    prometheus-client-mmap (1.3.0-x86_64-linux-musl)
+    prometheus-client-mmap (1.4.0-x86_64-linux-musl)
       base64
       bigdecimal
       logger
