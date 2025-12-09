@@ -13,6 +13,10 @@ class User < ApplicationRecord
   has_many :pins, dependent: :destroy
   has_many :pinned_cards, through: :pins, source: :card
   has_many :exports, class_name: "Account::Export", dependent: :destroy
+  has_many :mentorships_as_mentor, class_name: "Mentorship", foreign_key: :mentor_id, dependent: :destroy
+  has_many :mentorships_as_teen, class_name: "Mentorship", foreign_key: :teen_id, dependent: :destroy
+  has_many :qualifying_projects, foreign_key: :teen_id, dependent: :destroy
+  has_many :reviewed_qualifying_projects, class_name: "QualifyingProject", foreign_key: :reviewed_by_id, dependent: :nullify
 
   scope :with_avatars, -> { preload(:account, :avatar_attachment) }
 

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.2].define(version: 2025_12_05_010536) do
+ActiveRecord::Schema[8.2].define(version: 2025_12_06_000002) do
   create_table "accesses", id: :uuid, force: :cascade do |t|
     t.datetime "accessed_at"
     t.uuid "account_id", null: false
@@ -347,6 +347,20 @@ ActiveRecord::Schema[8.2].define(version: 2025_12_05_010536) do
     t.index ["source_type", "source_id"], name: "index_mentions_on_source"
   end
 
+  create_table "mentorships", id: :uuid, force: :cascade do |t|
+    t.uuid "account_id", null: false
+    t.datetime "created_at", null: false
+    t.uuid "mentor_id", null: false
+    t.string "status", limit: 255, default: "active", null: false
+    t.uuid "teen_id", null: false
+    t.datetime "updated_at", null: false
+    t.index ["account_id"], name: "index_mentorships_on_account_id"
+    t.index ["mentor_id", "status"], name: "index_mentorships_on_mentor_id_and_status"
+    t.index ["mentor_id"], name: "index_mentorships_on_mentor_id"
+    t.index ["teen_id", "status"], name: "index_mentorships_on_teen_id_and_status"
+    t.index ["teen_id"], name: "index_mentorships_on_teen_id"
+  end
+
   create_table "notification_bundles", id: :uuid, force: :cascade do |t|
     t.uuid "account_id", null: false
     t.datetime "created_at", null: false
@@ -400,6 +414,24 @@ ActiveRecord::Schema[8.2].define(version: 2025_12_05_010536) do
     t.uuid "user_id", null: false
     t.index ["account_id"], name: "index_push_subscriptions_on_account_id"
     t.index ["user_id", "endpoint"], name: "index_push_subscriptions_on_user_id_and_endpoint", unique: true
+  end
+
+  create_table "qualifying_projects", id: :uuid, force: :cascade do |t|
+    t.uuid "account_id", null: false
+    t.datetime "created_at", null: false
+    t.text "description", limit: 65535, null: false
+    t.text "feedback", limit: 65535
+    t.datetime "reviewed_at"
+    t.uuid "reviewed_by_id"
+    t.string "status", limit: 255, default: "not_started", null: false
+    t.string "submission_url", limit: 255
+    t.uuid "teen_id", null: false
+    t.string "title", limit: 255, null: false
+    t.datetime "updated_at", null: false
+    t.index ["account_id"], name: "index_qualifying_projects_on_account_id"
+    t.index ["reviewed_by_id"], name: "index_qualifying_projects_on_reviewed_by_id"
+    t.index ["teen_id", "status"], name: "index_qualifying_projects_on_teen_id_and_status"
+    t.index ["teen_id"], name: "index_qualifying_projects_on_teen_id"
   end
 
   create_table "reactions", id: :uuid, force: :cascade do |t|
@@ -496,7 +528,10 @@ ActiveRecord::Schema[8.2].define(version: 2025_12_05_010536) do
     t.boolean "active", default: true, null: false
     t.datetime "created_at", null: false
     t.uuid "identity_id"
+    t.integer "mentor_capacity", default: 5, null: false
+    t.integer "mentorship_role", default: 0, null: false
     t.string "name", limit: 255, null: false
+    t.integer "qualification_status", default: 0, null: false
     t.string "role", limit: 255, default: "member", null: false
     t.datetime "updated_at", null: false
     t.datetime "verified_at"

@@ -237,4 +237,26 @@ Rails.application.routes.draw do
     mount MissionControl::Jobs::Engine, at: "/jobs"
     get "stats", to: "stats#show"
   end
+
+  namespace :mentorship do
+    resources :qualifying_projects do
+      member do
+        post :submit
+        post :approve
+        post :reject
+      end
+    end
+
+    resources : mentorships, only: [:index, :create, :destroy] do
+      member do
+        post :complete
+        post :pause
+        post :resume
+      end
+    end
+
+    get 'dashboard', to: 'dashboard#show'
+    get 'available_mentors', to: 'mentors#index'
+    get 'available_teens', to: 'teens#index'
+  end
 end
