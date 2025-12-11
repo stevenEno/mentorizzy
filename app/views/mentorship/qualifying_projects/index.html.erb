@@ -1,0 +1,57 @@
+<% @page_title = "Qualifying Projects" %>
+
+<% content_for :header do %>
+  <div class="header__actions header__actions--start">
+    <%= link_to "Dashboard", mentorship_dashboard_path, class: "btn btn--back", data: { turbo_frame: "_top" } %>
+  </div>
+  <h1 class="header__title"><%= @page_title %></h1>
+  <% if Current.user.teen? %>
+    <div class="header__actions header__actions--end">
+      <%= link_to "New project", new_mentorship_qualifying_project_path, class: "btn", data: { turbo_frame: "_top" } %>
+    </div>
+  <% end %>
+<% end %>
+
+<%= tag.section class: "panel panel--wide shadow center" do %>
+  <% if @qualifying_projects.any? %>
+    <ul class="flex flex-column align-start gap margin-none-block-start unpad">
+      <% @qualifying_projects.each do |project| %>
+        <li class="list-style-none flex align-center gap full-width">
+          <div class="flex align-center gap flex-item-grow">
+            <% unless Current.user.teen? %>
+              <%= avatar_tag project.teen, class: "flex-item-no-shrink" %>
+            <% end %>
+            <div class="flex flex-column flex-item-grow">
+              <%= link_to project.title, mentorship_qualifying_project_path(project), class: "txt-ink txt-medium", data: { turbo_frame: "_top" } %>
+              <div class="flex align-center gap-half txt-small">
+                <% unless Current.user.teen? %>
+                  <span class="txt-subtle">by <%= project.teen.name %></span>
+                  <span class="txt-subtle">•</span>
+                <% end %>
+                <span class="txt-subtle">Status:</span>
+                <span class="<%= project_status_class(project.status) %>"><%= project.status.humanize %></span>
+                <% if project.reviewed_by %>
+                  <span class="txt-subtle">• Reviewed by <%= project.reviewed_by.name %></span>
+                <% end %>
+              </div>
+            </div>
+          </div>
+          <div class="flex gap-half">
+            <%= link_to mentorship_qualifying_project_path(project), class: "btn btn--plain txt-small", data: { turbo_frame: "_top" } do %>
+              View
+            <% end %>
+            <% if Current.user.teen? && project.teen == Current.user && project.in_progress? %>
+              <%= link_to "Edit", edit_mentorship_qualifying_project_path(project), class: "btn btn--plain txt-small", data: { turbo_frame: "_top" } %>
+            <% end %>
+          </div>
+        </li>
+      <% end %>
+    </ul>
+  <% else %>
+    <p>No qualifying projects yet.</p>
+    <% if Current.user.teen? %>
+      <%= link_to "Create your first project", new_mentorship_qualifying_project_path, class: "btn btn--link", data: { turbo_frame: "_top" } %>
+    <% end %>
+  <% end %>
+<% end %>
+

@@ -1,0 +1,112 @@
+<% @page_title = "Mentorship Dashboard" %>
+
+<% content_for :header do %>
+  <h1 class="header__title"><%= @page_title %></h1>
+<% end %>
+
+<% if Current.user.mentor? %>
+  <div class="panel shadow center" style="--panel-size: 60ch;">
+    <div class="flex flex-column gap">
+      <div class="flex flex-column gap-half">
+        <h2 class="txt-large margin-none">Your Mentoring Capacity</h2>
+        <div class="flex align-center gap">
+          <div class="flex flex-column">
+            <span class="txt-x-large font-weight-black"><%= @active_count %></span>
+            <span class="txt-small txt-subtle">Active mentees</span>
+          </div>
+          <hr class="separator--vertical" aria-hidden="true">
+          <div class="flex flex-column">
+            <span class="txt-x-large font-weight-black"><%= @available_capacity %></span>
+            <span class="txt-small txt-subtle">Available spots</span>
+          </div>
+          <hr class="separator--vertical" aria-hidden="true">
+          <div class="flex flex-column">
+            <span class="txt-x-large font-weight-black"><%= @capacity %></span>
+            <span class="txt-small txt-subtle">Total capacity</span>
+          </div>
+        </div>
+      </div>
+
+      <% if @active_mentorships.any? %>
+        <div class="flex flex-column gap-half">
+          <h2 class="txt-large margin-none">Current Mentees</h2>
+          <ul class="flex flex-column gap-half margin-none-block-start unpad">
+            <% @active_mentorships.each do |mentorship| %>
+              <li class="list-style-none flex align-center gap full-width">
+                <%= avatar_tag mentorship.teen, class: "flex-item-no-shrink" %>
+                <div class="flex flex-column flex-item-grow">
+                  <%= link_to mentorship.teen.name, user_path(mentorship.teen), class: "txt-ink txt-medium", data: { turbo_frame: "_top" } %>
+                  <span class="txt-small txt-subtle">Active since <%= time_ago_in_words(mentorship.created_at) %> ago</span>
+                </div>
+                <%= link_to mentorship_mentorships_path, class: "btn btn--plain txt-link txt-small", data: { turbo_frame: "_top" } do %>
+                  View details
+                <% end %>
+              </li>
+            <% end %>
+          </ul>
+        </div>
+      <% else %>
+        <p class="txt-subtle">You don't have any active mentees yet.</p>
+      <% end %>
+
+      <div class="flex gap-half">
+        <%= link_to "Pair with a teen", new_mentorship_mentorship_path, class: "btn btn--link", data: { turbo_frame: "_top" } %>
+        <%= link_to "View all mentorships", mentorship_mentorships_path, class: "btn btn--plain", data: { turbo_frame: "_top" } %>
+      </div>
+    </div>
+  </div>
+<% elsif Current.user.teen? %>
+  <div class="panel shadow center" style="--panel-size: 60ch;">
+    <div class="flex flex-column gap">
+      <% if @active_mentorship %>
+        <div class="flex flex-column gap-half">
+          <h2 class="txt-large margin-none">Your Mentor</h2>
+          <div class="flex align-center gap">
+            <%= avatar_tag @active_mentorship.mentor, class: "flex-item-no-shrink" %>
+            <div class="flex flex-column flex-item-grow">
+              <%= link_to @active_mentorship.mentor.name, user_path(@active_mentorship.mentor), class: "txt-ink txt-medium", data: { turbo_frame: "_top" } %>
+              <span class="txt-small txt-subtle">Mentoring since <%= time_ago_in_words(@active_mentorship.created_at) %> ago</span>
+            </div>
+          </div>
+        </div>
+      <% else %>
+        <div class="flex flex-column gap-half">
+          <h2 class="txt-large margin-none">No Active Mentor</h2>
+          <p class="txt-subtle">You don't have an active mentor yet.</p>
+          <%= link_to "Find a mentor", new_mentorship_mentorship_path, class: "btn btn--link", data: { turbo_frame: "_top" } %>
+        </div>
+      <% end %>
+
+      <div class="flex flex-column gap-half">
+        <div class="flex align-center justify-between">
+          <h2 class="txt-large margin-none">Qualifying Projects</h2>
+          <%= link_to "New project", new_mentorship_qualifying_project_path, class: "btn btn--link txt-small", data: { turbo_frame: "_top" } %>
+        </div>
+        <% if @qualifying_projects.any? %>
+          <ul class="flex flex-column gap-half margin-none-block-start unpad">
+            <% @qualifying_projects.each do |project| %>
+              <li class="list-style-none flex align-center gap full-width">
+                <div class="flex flex-column flex-item-grow">
+                  <%= link_to project.title, mentorship_qualifying_project_path(project), class: "txt-ink txt-medium", data: { turbo_frame: "_top" } %>
+                  <div class="flex align-center gap-half txt-small">
+                    <span class="txt-subtle">Status:</span>
+                    <span class="<%= project_status_class(project.status) %>"><%= project.status.humanize %></span>
+                    <% if project.reviewed_by %>
+                      <span class="txt-subtle">• Reviewed by <%= project.reviewed_by.name %></span>
+                    <% end %>
+                  </div>
+                </div>
+                <%= link_to mentorship_qualifying_project_path(project), class: "btn btn--plain txt-link txt-small", data: { turbo_frame: "_top" } do %>
+                  View
+                <% end %>
+              </li>
+            <% end %>
+          </ul>
+        <% else %>
+          <p class="txt-subtle">You don't have any qualifying projects yet.</p>
+        <% end %>
+      </div>
+    </div>
+  </div>
+<% end %>
+

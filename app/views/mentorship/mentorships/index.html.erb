@@ -1,0 +1,60 @@
+<% @page_title = "Mentorships" %>
+
+<% content_for :header do %>
+  <div class="header__actions header__actions--start">
+    <%= link_to "Dashboard", mentorship_dashboard_path, class: "btn btn--back", data: { turbo_frame: "_top" } %>
+  </div>
+  <h1 class="header__title"><%= @page_title %></h1>
+  <div class="header__actions header__actions--end">
+    <%= link_to "New mentorship", new_mentorship_mentorship_path, class: "btn", data: { turbo_frame: "_top" } %>
+  </div>
+<% end %>
+
+<%= tag.section class: "panel panel--wide shadow center" do %>
+  <% if @mentorships.any? %>
+    <ul class="flex flex-column align-start gap margin-none-block-start unpad">
+      <% @mentorships.each do |mentorship| %>
+        <li class="list-style-none flex align-center gap full-width">
+          <div class="flex align-center gap flex-item-grow">
+            <% if mentorship.mentor == Current.user %>
+              <%= avatar_tag mentorship.teen, class: "flex-item-no-shrink" %>
+              <div class="flex flex-column">
+                <span class="txt-medium">Mentoring <strong><%= mentorship.teen.name %></strong></span>
+                <span class="txt-small txt-subtle">Status: <%= mentorship.status.humanize %></span>
+              </div>
+            <% else %>
+              <%= avatar_tag mentorship.mentor, class: "flex-item-no-shrink" %>
+              <div class="flex flex-column">
+                <span class="txt-medium">Mentored by <strong><%= mentorship.mentor.name %></strong></span>
+                <span class="txt-small txt-subtle">Status: <%= mentorship.status.humanize %></span>
+              </div>
+            <% end %>
+          </div>
+          <div class="flex gap-half">
+            <% if mentorship.active? %>
+              <%= button_to pause_mentorship_mentorship_path(mentorship), method: :post, class: "btn btn--plain txt-small" do %>
+                Pause
+              <% end %>
+              <%= button_to complete_mentorship_mentorship_path(mentorship), method: :post, class: "btn btn--plain txt-small" do %>
+                Complete
+              <% end %>
+            <% elsif mentorship.paused? %>
+              <%= button_to resume_mentorship_mentorship_path(mentorship), method: :post, class: "btn btn--plain txt-small" do %>
+                Resume
+              <% end %>
+            <% end %>
+            <%= button_to mentorship_mentorship_path(mentorship), method: :delete, class: "btn btn--circle btn--negative txt-xx-small",
+                  data: { turbo_confirm: "Are you sure you want to end this mentorship?" } do %>
+              <%= icon_tag "minus" %>
+              <span class="for-screen-reader">End mentorship</span>
+            <% end %>
+          </div>
+        </li>
+      <% end %>
+    </ul>
+  <% else %>
+    <p>You don't have any mentorships yet.</p>
+    <%= link_to "Create a mentorship", new_mentorship_mentorship_path, class: "btn btn--link", data: { turbo_frame: "_top" } %>
+  <% end %>
+<% end %>
+

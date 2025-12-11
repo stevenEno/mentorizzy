@@ -239,24 +239,29 @@ Rails.application.routes.draw do
   end
 
   namespace :mentorship do
-    resources :qualifying_projects do
+    get "dashboard", to: "mentorships#dashboard"
+    resources :mentorships, only: [:index, :create, :destroy] do
+      member do
+        post :complete
+        post :pause
+        post :resume
+      end
+
+      resources :qualifying_projects, controller: "qualifying_projects" do
+        member do
+          post :submit
+          post :approve
+          post :reject
+        end
+      end
+    end
+
+    resources :qualifying_projects, only: [:index, :show, :new, :create, :edit, :update] do
       member do
         post :submit
         post :approve
         post :reject
       end
     end
-
-    resources : mentorships, only: [:index, :create, :destroy] do
-      member do
-        post :complete
-        post :pause
-        post :resume
-      end
-    end
-
-    get 'dashboard', to: 'dashboard#show'
-    get 'available_mentors', to: 'mentors#index'
-    get 'available_teens', to: 'teens#index'
   end
 end

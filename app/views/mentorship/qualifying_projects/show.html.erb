@@ -1,0 +1,72 @@
+<% @page_title = @qualifying_project.title %>
+
+<% content_for :header do %>
+  <div class="header__actions header__actions--start">
+    <%= back_link_to "Projects", mentorship_qualifying_projects_path, "keydown.left@document->hotkey#click keydown.esc@document->hotkey#click" %>
+  </div>
+  <h1 class="header__title"><%= @page_title %></h1>
+  <div class="header__actions header__actions--end">
+    <% if Current.user.teen? && @qualifying_project.teen == Current.user && @qualifying_project.in_progress? %>
+      <%= link_to "Edit", edit_mentorship_qualifying_project_path(@qualifying_project), class: "btn", data: { turbo_frame: "_top" } %>
+    <% end %>
+  </div>
+<% end %>
+
+<div class="panel shadow center" style="--panel-size: 70ch;">
+  <div class="flex flex-column gap">
+    <div class="flex flex-column gap-half">
+      <div class="flex align-center gap-half">
+        <span class="txt-small txt-subtle">Status:</span>
+        <span class="<%= project_status_class(@qualifying_project.status) %>"><%= @qualifying_project.status.humanize %></span>
+      </div>
+      <% unless Current.user.teen? %>
+        <div class="flex align-center gap">
+          <%= avatar_tag @qualifying_project.teen, class: "flex-item-no-shrink" %>
+          <span class="txt-medium">by <%= @qualifying_project.teen.name %></span>
+        </div>
+      <% end %>
+    </div>
+
+    <div class="flex flex-column gap-half">
+      <h2 class="txt-large margin-none">Description</h2>
+      <div class="txt-medium"><%= simple_format(@qualifying_project.description) %></div>
+    </div>
+
+    <% if @qualifying_project.submission_url.present? %>
+      <div class="flex flex-column gap-half">
+        <h2 class="txt-large margin-none">Submission</h2>
+        <%= link_to @qualifying_project.submission_url, @qualifying_project.submission_url, target: "_blank", rel: "noopener", class: "txt-link" %>
+      </div>
+    <% end %>
+
+    <% if @qualifying_project.feedback.present? %>
+      <div class="flex flex-column gap-half">
+        <h2 class="txt-large margin-none">Feedback</h2>
+        <div class="txt-medium"><%= simple_format(@qualifying_project.feedback) %></div>
+        <% if @qualifying_project.reviewed_by %>
+          <span class="txt-small txt-subtle">Reviewed by <%= @qualifying_project.reviewed_by.name %> on <%= @qualifying_project.reviewed_at&.strftime("%B %d, %Y") %></span>
+        <% end %>
+      </div>
+    <% end %>
+
+    <div class="flex gap-half">
+      <% if Current.user.teen? && @qualifying_project.teen == Current.user %>
+        <% if @qualifying_project.in_progress? %>
+          <%= button_to submit_mentorship_qualifying_project_path(@qualifying_project), method: :post, class: "btn btn--link" do %>
+            Submit for review
+          <% end %>
+        <% end %>
+      <% elsif Current.user.mentor? || Current.user.mentorship_role == "admin" %>
+        <% if @qualifying_project.submitted? %>
+          <%= button_to approve_mentorship_qualifying_project_path(@qualifying_project), method: :post, class: "btn btn--link" do %>
+            Approve
+          <% end %>
+          <%= button_to reject_mentorship_qualifying_project_path(@qualifying_project), method: :post, class: "btn btn--negative" do %>
+            Reject
+          <% end %>
+        <% end %>
+      <% end %>
+    </div>
+  </div>
+</div>
+

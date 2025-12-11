@@ -1,0 +1,50 @@
+<% @page_title = "Pair with a Mentor" %>
+
+<% content_for :header do %>
+  <div class="header__actions header__actions--start">
+    <%= back_link_to "Dashboard", mentorship_dashboard_path, "keydown.left@document->hotkey#click keydown.esc@document->hotkey#click" %>
+  </div>
+  <h1 class="header__title"><%= @page_title %></h1>
+<% end %>
+
+<div class="panel shadow center" style="--panel-size: 50ch;">
+  <%= form_with model: [:mentorship, @mentorship || Mentorship.new], class: "flex flex-column gap", data: { controller: "form" } do |form| %>
+    <% if Current.user.mentor? %>
+      <div class="flex flex-column gap-half">
+        <%= form.label :teen_id, "Select a teen to mentor" %>
+        <%= form.collection_select :teen_id,
+              Current.account.users.active.where(mentorship_role: :teen).where.not(id: Current.user.id),
+              :id, :name,
+              { prompt: "Choose a teen..." },
+              { class: "input full-width", required: true, data: { action: "keydown.esc@document->form#cancel" } } %>
+      </div>
+    <% elsif Current.user.teen? %>
+      <div class="flex flex-column gap-half">
+        <%= form.label :mentor_id, "Select a mentor" %>
+        <%= form.collection_select :mentor_id,
+              Current.account.users.active.where(mentorship_role: :mentor).where.not(id: Current.user.id),
+              :id, :name,
+              { prompt: "Choose a mentor..." },
+              { class: "input full-width", required: true, data: { action: "keydown.esc@document->form#cancel" } } %>
+      </div>
+    <% end %>
+
+    <% if @mentorship&.errors&.any? %>
+      <div class="margin-block-half txt-negative txt-small">
+        <p class="margin-block-none font-weight-bold">Couldn't create mentorship:</p>
+        <ul class="margin-block-none">
+          <% @mentorship.errors.full_messages.each do |message| %>
+            <li><%= message %></li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+
+    <button type="submit" class="btn btn--link center">
+      <span>Create mentorship</span>
+    </button>
+
+    <%= link_to "Cancel", mentorship_dashboard_path, data: { form_target: "cancel", turbo_frame: "_top" }, hidden: true %>
+  <% end %>
+</div>
+

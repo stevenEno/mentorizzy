@@ -6,6 +6,9 @@ class User < ApplicationRecord
   belongs_to :account
   belongs_to :identity, optional: true
 
+  enum :mentorship_role, { teen: 0, mentor: 1, admin: 2 }, default: :teen
+  enum :qualification_status, { unqualified: 0, in_progress: 1, qualified: 2 }, default: :unqualified
+
   has_many :comments, inverse_of: :creator, dependent: :destroy
 
   has_many :filters, foreign_key: :creator_id, inverse_of: :creator, dependent: :destroy

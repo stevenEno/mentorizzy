@@ -1,0 +1,45 @@
+<% @page_title = "Edit Project" %>
+
+<% content_for :header do %>
+  <div class="header__actions header__actions--start">
+    <%= back_link_to "Project", mentorship_qualifying_project_path(@qualifying_project), "keydown.left@document->hotkey#click keydown.esc@document->hotkey#click" %>
+  </div>
+  <h1 class="header__title"><%= @page_title %></h1>
+<% end %>
+
+<div class="panel shadow center" style="--panel-size: 60ch;">
+  <%= form_with model: [:mentorship, @qualifying_project], class: "flex flex-column gap", data: { controller: "form" } do |form| %>
+    <div class="flex flex-column gap-half">
+      <%= form.label :title, "Project Title" %>
+      <%= form.text_field :title, required: true, class: "input full-width", autofocus: true, data: { action: "keydown.esc@document->form#cancel" } %>
+    </div>
+
+    <div class="flex flex-column gap-half">
+      <%= form.label :description, "Description" %>
+      <%= form.text_area :description, required: true, class: "input input--textarea full-width", rows: 6, data: { action: "keydown.esc@document->form#cancel" } %>
+    </div>
+
+    <div class="flex flex-column gap-half">
+      <%= form.label :submission_url, "Submission URL (optional)" %>
+      <%= form.url_field :submission_url, class: "input full-width", data: { action: "keydown.esc@document->form#cancel" } %>
+    </div>
+
+    <% if @qualifying_project.errors.any? %>
+      <div class="margin-block-half txt-negative txt-small">
+        <p class="margin-block-none font-weight-bold">Couldn't save changes:</p>
+        <ul class="margin-block-none">
+          <% @qualifying_project.errors.full_messages.each do |message| %>
+            <li><%= message %></li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+
+    <button type="submit" class="btn btn--link center">
+      <span>Save changes</span>
+    </button>
+
+    <%= link_to "Cancel", mentorship_qualifying_project_path(@qualifying_project), data: { form_target: "cancel", turbo_frame: "_top" }, hidden: true %>
+  <% end %>
+</div>
+
