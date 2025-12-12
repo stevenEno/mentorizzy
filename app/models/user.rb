@@ -17,11 +17,34 @@ class User < ApplicationRecord
   has_many :pinned_cards, through: :pins, source: :card
   has_many :exports, class_name: "Account::Export", dependent: :destroy
   has_many :mentorships_as_mentor, class_name: "Mentorship", foreign_key: :mentor_id, dependent: :destroy
+  has_many :mentees, through: :mentorships_as_mentor, source: :teen
   has_many :mentorships_as_teen, class_name: "Mentorship", foreign_key: :teen_id, dependent: :destroy
+  has_one :active_mentor, -> { where(status: :active) }, through: : mentorships_as_teen, source: : mentor
   has_many :qualifying_projects, foreign_key: :teen_id, dependent: :destroy
   has_many :reviewed_qualifying_projects, class_name: "QualifyingProject", foreign_key: :reviewed_by_id, dependent: :nullify
 
   scope :with_avatars, -> { preload(:account, :avatar_attachment) }
+
+  def available_mentor_slots
+    return 0 unless mentor?
+    mentor_capactiy - active_mentorship_count
+  end
+
+  def active_mentorship_count
+    mentorships_as_mentor.where(status: :active).count
+  end
+
+  def can_accept_mentee?
+    mentor? && available_mentor_slots > 0
+  end
+
+  def eligible_for_mentorship?
+    teen? && qualified? && !has_active_mentorship?
+  end
+
+  def has_active_mentorship?
+    mentorships_as_teen.where(status: :active).exists?
+  end
 
   def deactivate
     transaction do
